@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2023 at 05:08 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.1.12
+-- Generation Time: Jan 16, 2025 at 06:25 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `PointOfSale`
+-- Database: `pointofsale`
 --
 
 DELIMITER $$
@@ -102,6 +102,13 @@ CREATE TABLE `detail_penjualan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `detail_penjualan`
+--
+
+INSERT INTO `detail_penjualan` (`jumlah`, `Subtotal`, `kode_produk`, `penjualan_Id`) VALUES
+(10, 150000, 1, 1);
+
+--
 -- Triggers `detail_penjualan`
 --
 DELIMITER $$
@@ -125,6 +132,14 @@ CREATE TABLE `kategori` (
   `no_rak` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`kategori_Id`, `nama_kategori`, `no_rak`) VALUES
+(1, 'sembako', 1),
+(2, 'Minuman', 2),
+(3, 'Snack', 3);
 
 -- --------------------------------------------------------
 
@@ -150,6 +165,15 @@ CREATE TABLE `merek` (
   `nama_merek` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `merek`
+--
+
+INSERT INTO `merek` (`merek_Id`, `nama_merek`) VALUES
+(1, 'rojo lele'),
+(2, 'minyak kita'),
+(3, 'gulaku'),
+(4, 'sprite');
 
 -- --------------------------------------------------------
 
@@ -183,6 +207,7 @@ CREATE TABLE `pembelian` (
   `tanggal_pembelian` date NOT NULL,
   `user_Id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -198,6 +223,13 @@ CREATE TABLE `penjualan` (
   `user_Id` int(11) NOT NULL,
   `keuntungan` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `penjualan`
+--
+
+INSERT INTO `penjualan` (`penjualan_Id`, `tanggal_penjualan`, `Total_pembayaran`, `uang_diterima`, `uang_kembalian`, `user_Id`, `keuntungan`) VALUES
+(1, '2025-01-15', 150000, 200000, 50000, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -216,6 +248,16 @@ CREATE TABLE `produk` (
   `merek_Id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `produk`
+--
+
+INSERT INTO `produk` (`kode_produk`, `nama_produk`, `harga_beli`, `stok_produk`, `harga_jual`, `supplier_Id`, `kategori_Id`, `merek_Id`) VALUES
+(1, 'beras', 13500, 20, 15000, 1, 1, 1),
+(156512059, 'Sprite', 5000, 15, 8000, 4, 2, 4),
+(622623496, 'gulaku', 24000, 50, 26000, 3, 1, 3),
+(876766075, 'minyak', 16000, 20, 18000, 2, 1, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -229,6 +271,15 @@ CREATE TABLE `supplier` (
   `telp_supplier` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `supplier`
+--
+
+INSERT INTO `supplier` (`supplier_Id`, `nama_supplier`, `alamat_supplier`, `telp_supplier`) VALUES
+(1, 'Arif', 'Tarub', '087812345678'),
+(2, 'Rafli', 'Mejasem', '087812345678'),
+(3, 'Riyan', 'Brebes', '087812345678'),
+(4, 'Izath', 'Balapulang', '087812345678');
 
 -- --------------------------------------------------------
 
@@ -285,8 +336,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_Id`, `nama_user`, `alamat_user`, `telp_user`, `username_user`, `password_user`, `level_user`, `status_user`) VALUES
-(1, 'admin', '-', '-', 'admin', 'admin', 'PEMILIK', 'AKTIF'),
-(2, 'karyawan', '-', '-', 'karyawan', 'karyawan', 'KARYAWAN', 'AKTIF');
+(2, 'karyawan', '-', '-', 'karyawan', 'karyawan', 'KARYAWAN', 'AKTIF'),
+(7, 'Izath', 'Balapulang wetan', '087812275972', 'izath', '12345', 'PEMILIK', 'AKTIF'),
+(8, 'Arif Tri Prawito', 'Tarub', '085956450101', 'arif', '12345', 'PEMILIK', 'AKTIF'),
+(9, 'Rafli Miftahul Bachtiar', 'Mejasem', '089616376167', 'rafli', '12345', 'PEMILIK', 'AKTIF'),
+(10, 'Riyan Nurhidayat', 'Brebes', '085691525064', 'riyan', '12345', 'PEMILIK', 'AKTIF');
 
 -- --------------------------------------------------------
 
@@ -295,7 +349,7 @@ INSERT INTO `users` (`user_Id`, `nama_user`, `alamat_user`, `telp_user`, `userna
 --
 DROP TABLE IF EXISTS `laporan_penjualan`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_penjualan`  AS SELECT `p`.`penjualan_Id` AS `penjualan_Id`, `p`.`tanggal_penjualan` AS `tanggal_penjualan`, `p`.`Total_pembayaran` AS `total_pembayaran`, `u`.`nama_user` AS `nama_user` FROM (`penjualan` `p` join `users` `u` on(`p`.`user_Id` = `u`.`user_Id`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `laporan_penjualan`  AS SELECT `p`.`penjualan_Id` AS `penjualan_Id`, `p`.`tanggal_penjualan` AS `tanggal_penjualan`, `p`.`Total_pembayaran` AS `total_pembayaran`, `u`.`nama_user` AS `nama_user` FROM (`penjualan` `p` join `users` `u` on(`p`.`user_Id` = `u`.`user_Id`)) ;
 
 -- --------------------------------------------------------
 
@@ -304,7 +358,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `nota_penjualan`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `nota_penjualan`  AS SELECT `detail_penjualan`.`kode_produk` AS `kode_produk`, `penjualan`.`user_Id` AS `user_Id`, `penjualan`.`penjualan_Id` AS `penjualan_Id`, `penjualan`.`tanggal_penjualan` AS `tanggal_penjualan`, `penjualan`.`Total_pembayaran` AS `Total_pembayaran`, `penjualan`.`uang_diterima` AS `uang_diterima`, `penjualan`.`uang_kembalian` AS `uang_kembalian`, `detail_penjualan`.`jumlah` AS `jumlah`, `detail_penjualan`.`Subtotal` AS `Subtotal`, `users`.`nama_user` AS `nama_user`, `produk`.`nama_produk` AS `nama_produk`, `produk`.`harga_jual` AS `harga_jual` FROM (((`penjualan` join `detail_penjualan` on(`penjualan`.`penjualan_Id` = `detail_penjualan`.`penjualan_Id`)) join `users` on(`penjualan`.`user_Id` = `users`.`user_Id`)) join `produk` on(`detail_penjualan`.`kode_produk` = `produk`.`kode_produk`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `nota_penjualan`  AS SELECT `detail_penjualan`.`kode_produk` AS `kode_produk`, `penjualan`.`user_Id` AS `user_Id`, `penjualan`.`penjualan_Id` AS `penjualan_Id`, `penjualan`.`tanggal_penjualan` AS `tanggal_penjualan`, `penjualan`.`Total_pembayaran` AS `Total_pembayaran`, `penjualan`.`uang_diterima` AS `uang_diterima`, `penjualan`.`uang_kembalian` AS `uang_kembalian`, `detail_penjualan`.`jumlah` AS `jumlah`, `detail_penjualan`.`Subtotal` AS `Subtotal`, `users`.`nama_user` AS `nama_user`, `produk`.`nama_produk` AS `nama_produk`, `produk`.`harga_jual` AS `harga_jual` FROM (((`penjualan` join `detail_penjualan` on(`penjualan`.`penjualan_Id` = `detail_penjualan`.`penjualan_Id`)) join `users` on(`penjualan`.`user_Id` = `users`.`user_Id`)) join `produk` on(`detail_penjualan`.`kode_produk` = `produk`.`kode_produk`)) ;
 
 -- --------------------------------------------------------
 
@@ -313,7 +367,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `tableproduk`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tableproduk`  AS SELECT `p`.`kode_produk` AS `kode_produk`, `p`.`nama_produk` AS `nama_produk`, `p`.`harga_beli` AS `harga_beli`, `p`.`harga_jual` AS `harga_jual`, `p`.`stok_produk` AS `stok_produk`, `s`.`nama_supplier` AS `nama_supplier`, `k`.`nama_kategori` AS `nama_kategori`, `m`.`nama_merek` AS `nama_merek` FROM (((`produk` `p` join `supplier` `s` on(`p`.`supplier_Id` = `s`.`supplier_Id`)) join `kategori` `k` on(`p`.`kategori_Id` = `k`.`kategori_Id`)) join `merek` `m` on(`p`.`merek_Id` = `m`.`merek_Id`))  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tableproduk`  AS SELECT `p`.`kode_produk` AS `kode_produk`, `p`.`nama_produk` AS `nama_produk`, `p`.`harga_beli` AS `harga_beli`, `p`.`harga_jual` AS `harga_jual`, `p`.`stok_produk` AS `stok_produk`, `s`.`nama_supplier` AS `nama_supplier`, `k`.`nama_kategori` AS `nama_kategori`, `m`.`nama_merek` AS `nama_merek` FROM (((`produk` `p` join `supplier` `s` on(`p`.`supplier_Id` = `s`.`supplier_Id`)) join `kategori` `k` on(`p`.`kategori_Id` = `k`.`kategori_Id`)) join `merek` `m` on(`p`.`merek_Id` = `m`.`merek_Id`)) ;
 
 -- --------------------------------------------------------
 
@@ -322,10 +376,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `tableusers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tableusers` AS
-SELECT `users`.`user_Id` AS `user_Id`, `users`.`nama_user` AS `nama_user`, `users`.`alamat_user` AS `alamat_user`, `users`.`telp_user` AS `telp_user`, `users`.`username_user` AS `username_user`, `users`.`level_user` AS `level_user`, `users`.`status_user` AS `status_user`
-FROM `users`;
-
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tableusers`  AS SELECT `users`.`user_Id` AS `user_Id`, `users`.`nama_user` AS `nama_user`, `users`.`alamat_user` AS `alamat_user`, `users`.`telp_user` AS `telp_user`, `users`.`username_user` AS `username_user`, `users`.`level_user` AS `level_user`, `users`.`status_user` AS `status_user` FROM `users` ;
 
 --
 -- Indexes for dumped tables
@@ -403,13 +454,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `kategori_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `kategori_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `merek`
 --
 ALTER TABLE `merek`
-  MODIFY `merek_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `merek_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `penjualan`
@@ -421,13 +472,13 @@ ALTER TABLE `penjualan`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplier_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `supplier_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
@@ -467,10 +518,6 @@ ALTER TABLE `produk`
   ADD CONSTRAINT `produk_ibfk_2` FOREIGN KEY (`merek_Id`) REFERENCES `merek` (`merek_Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `produk_ibfk_3` FOREIGN KEY (`supplier_Id`) REFERENCES `supplier` (`supplier_Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
-
-ALTER TABLE kategori AUTO_INCREMENT = 1;
-ALTER TABLE supplier AUTO_INCREMENT = 1;
-ALTER TABLE merek AUTO_INCREMENT = 1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
